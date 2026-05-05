@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Company Profile</title>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+</head>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            💼 JobPortal
+        </a>
+        <div class="ms-auto d-flex gap-2">
+            <a href="/recruiter/dashboard"
+               class="btn btn-outline-light">
+                Dashboard
+            </a>
+            <a href="/recruiter/companies"
+               class="btn btn-outline-light">
+                🌍 All Companies
+            </a>
+            <a href="/recruiter/jobs/post"
+               class="btn btn-success">
+                + Post Job
+            </a>
+            <form th:action="@{/logout}"
+                  method="post"
+                  class="d-inline">
+                <input type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"/>
+                <button type="submit"
+                    class="btn btn-light">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <!-- Success message -->
+            <div th:if="${param.saved}"
+                 class="alert alert-success mb-3">
+                ✅ Company saved successfully!
+            </div>
+
+            <!-- Error message -->
+            <div th:if="${error}"
+                 class="alert alert-danger mb-3"
+                 th:text="${error}">
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark
+                            text-white d-flex
+                            justify-content-between
+                            align-items-center">
+                    <h5 class="mb-0">
+                        🏢 Company Profile
+                    </h5>
+                    <a href="/recruiter/company/new"
+                       class="btn btn-success btn-sm">
+                        + Add New Company
+                    </a>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- Updating existing -->
+                    <div th:if="${company.id != null}"
+                         class="alert alert-info mb-3">
+                        ✏️ Updating:
+                        <strong
+                            th:text="${company.name}">
+                        </strong>
+                    </div>
+
+                    <!-- Creating new -->
+                    <div th:if="${company.id == null}"
+                         class="alert alert-success
+                                mb-3">
+                        ➕ Creating new company profile
+                    </div>
+
+                    <form th:action="@{/recruiter/company}"
+                          method="post">
+                        <input type="hidden"
+                            th:name="${_csrf.parameterName}"
+                            th:value="${_csrf.token}"/>
+
+                        <!-- id field — null for new,
+                             value for edit -->
+                        <input type="hidden"
+                            name="id"
+                            th:value="${company.id}"/>
+
+                        <div class="mb-3">
+                            <label class="form-label
+                                         fw-bold">
+                                Company Name
+                                <span class="text-danger">
+                                    *
+                                </span>
+                            </label>
+                            <input type="text"
+                                name="name"
+                                class="form-control"
+                                th:value="${company.name}"
+                                placeholder="e.g. TCS,
+                                Infosys, Accenture"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label
+                                         fw-bold">
+                                Description
+                            </label>
+                            <textarea
+                                name="description"
+                                class="form-control"
+                                rows="4"
+                                placeholder="About your
+                                company..."
+                                th:text="${company
+                                    .description}">
+                            </textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label
+                                         fw-bold">
+                                Website
+                            </label>
+                            <input type="text"
+                                name="website"
+                                class="form-control"
+                                th:value="${company
+                                    .website}"
+                                placeholder="https://
+                                yourcompany.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label
+                                         fw-bold">
+                                Location
+                                <span class="text-danger">
+                                    *
+                                </span>
+                            </label>
+                            <input type="text"
+                                name="location"
+                                class="form-control"
+                                th:value="${company
+                                    .location}"
+                                placeholder="e.g.
+                                Bangalore, India"
+                                required>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit"
+                                class="btn btn-success
+                                       btn-lg">
+                                💾 Save Company
+                            </button>
+                            <a href="/recruiter/companies"
+                               class="btn
+                                   btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info box -->
+            <div class="card mt-3 border-info">
+                <div class="card-body">
+                    <h6 class="text-info fw-bold">
+                        ℹ️ Info
+                    </h6>
+                    <ul class="mb-0 text-muted small">
+                        <li>
+                            Click "+ Add New Company"
+                            to add multiple companies
+                        </li>
+                        <li>
+                            Each company can have
+                            multiple job postings
+                        </li>
+                        <li>
+                            You must save a company
+                            before posting jobs
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer class="bg-light text-center py-3 mt-4">
+    <p class="mb-0 text-muted">
+        © 2024 JobPortal. All rights reserved.
+    </p>
+</footer>
+<script src="/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>

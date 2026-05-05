@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Post a Job</title>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+</head>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            💼 JobPortal
+        </a>
+        <div class="ms-auto d-flex gap-2">
+            <a href="/recruiter/dashboard"
+               class="btn btn-outline-light">
+                Dashboard
+            </a>
+            <a href="/recruiter/companies"
+               class="btn btn-outline-light">
+                🌍 All Companies
+            </a>
+            <form th:action="@{/logout}"
+                  method="post"
+                  class="d-inline">
+                <input type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"/>
+                <button type="submit"
+                    class="btn btn-light">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark
+                            text-white">
+                    <h5 class="mb-0">
+                        📢 Post a New Job
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- Error message -->
+                    <div th:if="${error}"
+                         class="alert alert-danger"
+                         th:text="${error}">
+                    </div>
+
+                    <form th:action="@{/recruiter/jobs/post}"
+                          method="post"
+                          th:object="${job}">
+                        <input type="hidden"
+                            th:name="${_csrf.parameterName}"
+                            th:value="${_csrf.token}"/>
+
+                        <div class="row g-3">
+
+                            <!-- Company selector -->
+                            <div class="col-md-12">
+                                <label class="form-label
+                                             fw-bold">
+                                    Select Company
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <select name="companyId"
+                                    class="form-select"
+                                    required>
+                                    <option value="">
+                                        -- Select Company --
+                                    </option>
+                                    <option
+                                        th:each="company
+                                            : ${companies}"
+                                        th:value="${company.id}"
+                                        th:text="${company.name}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    Don't see your company?
+                                    <a href="/recruiter/company/new">
+                                        Add new company
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Job Title -->
+                            <div class="col-md-12">
+                                <label class="form-label
+                                             fw-bold">
+                                    Job Title
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text"
+                                    th:field="*{title}"
+                                    class="form-control"
+                                    placeholder="e.g. Java
+                                        Backend Developer"
+                                    required>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="col-md-6">
+                                <label class="form-label
+                                             fw-bold">
+                                    Location
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <input type="text"
+                                    th:field="*{location}"
+                                    class="form-control"
+                                    placeholder="e.g. Bangalore"
+                                    required>
+                            </div>
+
+                            <!-- Salary -->
+                            <div class="col-md-6">
+                                <label class="form-label
+                                             fw-bold">
+                                    Salary
+                                </label>
+                                <input type="text"
+                                    th:field="*{salary}"
+                                    class="form-control"
+                                    placeholder="e.g. 5-8 LPA">
+                            </div>
+
+                            <!-- Category -->
+                            <div class="col-md-6">
+                                <label class="form-label
+                                             fw-bold">
+                                    Category
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <select th:field="*{category}"
+                                    class="form-select"
+                                    required>
+                                    <option value="">
+                                        -- Select Category --
+                                    </option>
+                                    <option value="IT">IT</option>
+                                    <option value="Finance">
+                                        Finance
+                                    </option>
+                                    <option value="Marketing">
+                                        Marketing
+                                    </option>
+                                    <option value="Healthcare">
+                                        Healthcare
+                                    </option>
+                                    <option value="Education">
+                                        Education
+                                    </option>
+                                    <option value="Other">
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Job Type -->
+                            <div class="col-md-6">
+                                <label class="form-label
+                                             fw-bold">
+                                    Job Type
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <select th:field="*{jobType}"
+                                    class="form-select"
+                                    required>
+                                    <option value="">
+                                        -- Select Type --
+                                    </option>
+                                    <option value="Full-Time">
+                                        Full-Time
+                                    </option>
+                                    <option value="Part-Time">
+                                        Part-Time
+                                    </option>
+                                    <option value="Remote">
+                                        Remote
+                                    </option>
+                                    <option value="Internship">
+                                        Internship
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Experience -->
+                            <div class="col-md-12">
+                                <label class="form-label
+                                             fw-bold">
+                                    Experience Required
+                                </label>
+                                <select th:field="*{experience}"
+                                    class="form-select">
+                                    <option value="">
+                                        -- Select Experience --
+                                    </option>
+                                    <option value="Fresher">
+                                        Fresher
+                                    </option>
+                                    <option value="1-3 years">
+                                        1-3 years
+                                    </option>
+                                    <option value="3-5 years">
+                                        3-5 years
+                                    </option>
+                                    <option value="5+ years">
+                                        5+ years
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-md-12">
+                                <label class="form-label
+                                             fw-bold">
+                                    Job Description
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <textarea
+                                    th:field="*{description}"
+                                    class="form-control"
+                                    rows="6"
+                                    placeholder="Describe the
+                                        role, responsibilities,
+                                        requirements..."
+                                    required>
+                                </textarea>
+                            </div>
+
+                            <!-- Submit -->
+                            <div class="col-md-12">
+                                <button type="submit"
+                                    class="btn btn-success
+                                           w-100 py-2">
+                                    📢 Post Job
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-light text-center py-3 mt-4">
+    <p class="mb-0 text-muted">
+        © 2024 JobPortal. All rights reserved.
+    </p>
+</footer>
+<script src="/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>
